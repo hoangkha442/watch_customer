@@ -60,4 +60,17 @@ input[type='search']:focus, input[type='number']:focus, input[type='tel']:focus,
     font-weight: 700 !important;
   }
 
-  
+  .ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn, .ant-tabs .ant-tabs-tab:hover {
+    color: #c89979 !important;
+  }
+  .ant-tabs .ant-tabs-ink-bar{
+    background-color: #c89979 !important;
+  }
+  .ant-tabs .ant-tabs-tab{
+    font-size: 24px;
+    font-weight: 700;
+  }
+
+  .row-email{
+    border-top: 1px solid #ccc;
+  }
