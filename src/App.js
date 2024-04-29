@@ -8,6 +8,7 @@ import HomePage from './pages/HomePage/HomePage';
 import Search from './pages/Search/Search';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
+import Introduction from './pages/Introduction/Introduction';
 function App() {
   return (
     
@@ -15,6 +16,7 @@ function App() {
       <Header />
       <Routes>
         <Route exact path="/" element={<HomePage />} />
+        <Route exact path="/gioi-thieu" element={<Introduction />} />
         <Route path="/search" element={<Search />} />
       </Routes>
       <Footer />

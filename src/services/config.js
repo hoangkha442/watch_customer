@@ -1,5 +1,5 @@
 
-const token = localStorage.getItem('token');
+const token = localStorage?.getItem('token');
 export const https = Axios.create(
     {
         baseURL: 'http://localhost:8080/',
