@@ -5,7 +5,7 @@ const navLinks = [
   { name: 'Trang chủ', path: '/' },
   { name: 'Giới thiệu', path: '/gioi-thieu' },
   { name: 'Đồng hồ nam', path: '/dong-ho-nam' },
-  { name: 'Blogs', path: '/blogs' },
+  { name: 'Đồng hồ nữ', path: '/dong-ho-nu' },
   { name: 'Liên hệ', path: '/lien-he' },
   // ...other nav links
 ];
@@ -18,7 +18,7 @@ const HeaderBottomNav = () => {
   return (
     <div className="header-bottom bg-[#333333] border-t border-b border-gray-700 roboto-regular h-full">
       <div className="container mx-auto h-full">
-        <ul className="flex uppercase text-white text-sm justify-center items-center py-4 space-x-20">
+        <ul className="flex uppercase text-white text-sm justify-center items-center py-4 space-x-16">
           {navLinks.map((link) => (
             <li key={link.name}>
               <a

@@ -1,5 +1,5 @@
 const USER_LOCAL = "USER_LOCAL";
-const COURSES_LIST_REGISTER = "COURSES_LIST_REGISTER";
+const CART = "CART";
 const WISHLIST = "WISHLIST";
 
 // đặt 1 key dung chung để setItem
@@ -29,11 +29,11 @@ export const coursesListRegisterStorage = {
     // convert dữ liệu từ Ob sang json
     let coursesListRegisterJSON = JSON.stringify(coursesData);
     // lưu xuống local
-    localStorage.setItem(COURSES_LIST_REGISTER, coursesListRegisterJSON);
+    localStorage.setItem(CART, coursesListRegisterJSON);
   },
   get: () => {
     //lấy dữ liệu lên
-    let coursesListRegisterJSON = localStorage.getItem(COURSES_LIST_REGISTER);
+    let coursesListRegisterJSON = localStorage.getItem(CART);
     if (coursesListRegisterJSON) {
       return JSON.parse(coursesListRegisterJSON);
     } else {
@@ -41,7 +41,7 @@ export const coursesListRegisterStorage = {
     }
   },
   remove: () => {
-    localStorage.removeItem(COURSES_LIST_REGISTER);
+    localStorage.removeItem(CART);
   },
 };
 

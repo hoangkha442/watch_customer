@@ -5,7 +5,7 @@ export default function AboutProfile() {
     <div className="relative">
       {/* Background Image */}
       <div
-      className="bg-fixed bg-center bg-cover bg-no-repeat h-72 object-cover bg-fill"
+      className="bg-fixed bg-center bg-contain bg-no-repeat h-72 object-cover bg-fill"
       style={{ backgroundImage: "url('https://mauweb.monamedia.net/donghohaitrieu/wp-content/uploads/2019/07/banner-portfolio.jpg')" }}
     >
       {/* Content on top of the background image */}

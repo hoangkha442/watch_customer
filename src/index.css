@@ -74,10 +74,6 @@ input[type='search']:focus, input[type='number']:focus, input[type='tel']:focus,
   .row-email{
     border-top: 1px solid #ccc;
   }
-
-  /* .bg-loaded {
-    background-image: url(https://mauweb.monamedia.net/donghohaitrieu/wp-content/uploads/2019/07/banner-portfolio.jpg) !important; 
- } */
  .bg-fill  {
   background-position: 50% 50% !important;
  }

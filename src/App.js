@@ -9,6 +9,12 @@ import Search from './pages/Search/Search';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import Introduction from './pages/Introduction/Introduction';
+import MenWatch from './pages/MenWatch/MenWatch';
+import WomenWatch from './pages/WomenWatch/WomenWatch';
+import Contact from './pages/Contact/Contact';
+import Detail from './pages/Detail/Detail';
+import Cart from './pages/Cart/Cart';
+import Login from './pages/Login/Login';
 function App() {
   return (
     
@@ -16,8 +22,15 @@ function App() {
       <Header />
       <Routes>
         <Route exact path="/" element={<HomePage />} />
-        <Route exact path="/gioi-thieu" element={<Introduction />} />
+        <Route path="/gioi-thieu" element={<Introduction />} />
+        <Route path='/dong-ho-nam' element={<MenWatch />}/>
+        <Route path='/dong-ho-nam' element={<MenWatch />}/>
+        <Route path='/dong-ho-nu' element={<WomenWatch />}/>
+        <Route path='/lien-he' element={<Contact />}/>
+        <Route path='/san-pham/:id' element={<Detail />}/>
+        <Route path='/gio-hang' element={<Cart />}/>
         <Route path="/search" element={<Search />} />
+        <Route path="/dang-nhap" element={<Login />} />
       </Routes>
       <Footer />
     </Router>

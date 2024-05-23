@@ -5,6 +5,7 @@ export default function KindOfWatch() {
   return (
     <div className="flex justify-center items-center space-x-8 py-20 container">
             <WatchCard 
+            className="w-full"
                 customeStyle="h-[250px] w-full"
                 titleKOW="CỔ ĐIỂN" 
                 subtitleKOF="Đa dạng về phong cách, kiểu dáng, màu sắc, kích cỡ…" 
@@ -12,6 +13,7 @@ export default function KindOfWatch() {
                 altText="Men's Watch" 
             />
             <WatchCard 
+                className="w-full"
                 customeStyle="h-[250px] w-full"
                 titleKOW="SMART WATCH" 
                 subtitleKOF="Đa dạng về phong cách, kiểu dáng, màu sắc, kích cỡ…" 

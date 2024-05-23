@@ -1,7 +1,16 @@
 import { https } from "./config";
 
-export const CoursesService = {
-    getProduct: () => {
-      return https.get(`/api/QuanLyKhoaHoc/LayDanhSachKhoaHoc?MaNhom=GP05`);
-    }
+export const ProductService = {
+    getTopSelling: async () => {
+      return await https.get(`/product/top-selling`);
+    },
+    getPopularPrd: async () => {
+      return await https.get(`/product/popular`)
+    },
+    getTopPromotion: async () => {
+      return await https.get(`/product/top-promotions`)
+    },
+    getNew: async () => {
+      return await https.get(`/product/new-products`)
+    },
 }
