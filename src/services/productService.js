@@ -13,4 +13,13 @@ export const ProductService = {
     getNew: async () => {
       return await https.get(`/product/new-products`)
     },
+    getProduct: async () => {
+      return await https.get(`/product`)
+    },
+    getSearchProduct: async (productName) => {
+      return await https.get(`/product/search/${productName}`)
+    },
+    getProductId: async (productId) => {
+      return await https.get(`/product/get-product/${productId}`)
+    },
 }

@@ -5,12 +5,14 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
-import userReducer from './redux/UserSlice';
+import userReducer from './redux/UserSlice.js';
+import cartReducer from './redux/CartSlice';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 export let store = configureStore({
   reducer: {
     user: userReducer,
+    cart: cartReducer,
   },
 });
 root.render(

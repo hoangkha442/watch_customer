@@ -1,8 +1,8 @@
 import React from 'react';
 
-const CartSummary = ({ subtotal }) => {
+const CartSummary = ({ subtotal, handleCheckout }) => {
   return (
-    <div className="p-4  border-l">
+    <div className="p-4 border-l">
       <h2 className="text-xl font-bold mb-4">Tổng Số Lượng</h2>
       <div className="mb-4">
         <div className="flex justify-between mb-2">
@@ -22,7 +22,7 @@ const CartSummary = ({ subtotal }) => {
           <span className="font-medium">{subtotal.toLocaleString()} ₫</span>
         </div>
       </div>
-      <button className="w-full py-2 bg-orange-500 text-white font-bold rounded-lg mb-4">TIẾN HÀNH THANH TOÁN</button>
+      <button onClick={handleCheckout} className="w-full py-2 bg-orange-500 text-white font-bold rounded-lg mb-4">TIẾN HÀNH THANH TOÁN</button>
       <div>
         <h3 className="text-lg font-bold mb-2">Phiếu ưu đãi</h3>
         <div className="flex">

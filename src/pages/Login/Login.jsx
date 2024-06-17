@@ -1,22 +1,14 @@
-// Login.jsx
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import { UserServices } from '../../services/UserService';
 import { setLogin } from '../../redux/UserSlice';
-import Swal from 'sweetalert2';
 import { userLocalStorage } from '../../services/LocalService';
-import { useNavigate } from 'react-router-dom';
-import useFetchProfile from '../../hook/useFetchProfile';
 
 export default function Login() {
-  const Style = {
-    inputForm: 'block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-gray-300 focus:border-gray-300 sm:text-sm',
-  };
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  useFetchProfile();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -25,38 +17,22 @@ export default function Login() {
   const [passwordError, setPasswordError] = useState('');
   const [formError, setFormError] = useState('');
 
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const validatePassword = (password) => {
-    return password.length > 0;
-  };
+  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const validatePassword = (password) => password.length > 0;
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
     setFormError('');
-    if (!validateEmail(e.target.value)) {
-      setEmailError('Email không đúng định dạng.');
-    } else {
-      setEmailError('');
-    }
+    setEmailError(validateEmail(e.target.value) ? '' : 'Email không đúng định dạng.');
   };
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
     setFormError('');
-    if (!validatePassword(e.target.value)) {
-      setPasswordError('Mật khẩu không được để trống.');
-    } else {
-      setPasswordError('');
-    }
+    setPasswordError(validatePassword(e.target.value) ? '' : 'Mật khẩu không được để trống.');
   };
 
-  const handleRememberMeChange = (e) => {
-    setRememberMe(e.target.checked);
-  };
+  const handleRememberMeChange = (e) => setRememberMe(e.target.checked);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -77,6 +53,7 @@ export default function Login() {
       });
       dispatch(setLogin(response.data));
       userLocalStorage.set(response.data);
+
       if (rememberMe) {
         localStorage.setItem('user', JSON.stringify(response.data));
       } else {
@@ -84,12 +61,14 @@ export default function Login() {
       }
       setFormError('');
       navigate('/');
+
+        window.location.reload()
     } catch (err) {
       console.log('err: ', err);
       Swal.fire({
         position: 'center',
         icon: 'error',
-        title: err.response.data.message,
+        title: err.response?.data?.message || 'Đăng nhập thất bại',
         showConfirmButton: false,
         timer: 1000,
       });
@@ -99,7 +78,7 @@ export default function Login() {
 
   return (
     <div className="flex items-center justify-center bg-[#fff] py-20">
-      <div className="w-full container space-y-2 bg-[#fff] ">
+      <div className="w-full container space-y-2 bg-[#fff]">
         <h2 className="text-xl font-bold text-left text-[#1c1c1c]">ĐĂNG NHẬP</h2>
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div>
@@ -110,7 +89,7 @@ export default function Login() {
               type="text"
               id="email"
               name="email"
-              className={Style.inputForm}
+              className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-gray-300 focus:border-gray-300 sm:text-sm"
               value={email}
               onChange={handleEmailChange}
               required
@@ -125,7 +104,7 @@ export default function Login() {
               type="password"
               id="password"
               name="password"
-              className={Style.inputForm}
+              className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-gray-300 focus:border-gray-300 sm:text-sm"
               value={password}
               onChange={handlePasswordChange}
               required

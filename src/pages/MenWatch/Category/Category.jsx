@@ -17,7 +17,7 @@ export default function Category() {
                         </span>
                     </div>
                     {dropdownOpen && (
-                        <div className="mt-2 space-y-2 px-4 bg-[#dddddd1a] border border-[#ddd] rounded text-[#334862] text-[13px]">
+                        <div className="duration-500 transition-all mt-2 space-y-2 px-4 bg-[#dddddd1a] border border-[#ddd] rounded text-[#334862] text-[13px]">
                             <a className="block py-2 mt-2 transition-all duration-300 hover:text-[#c89979] border-b border-dashed border-[#ddd]" href="/dong-ho-nu">Đồng hồ nữ</a>
                             <a className="block py-1 mt-2 transition-all duration-300 hover:text-[#c89979] border-b border-dashed border-[#ddd]" href="/dong-ho-nam">Đồng hồ nam</a>
                             <a className="block py-1 mt-2 transition-all duration-300 hover:text-[#c89979] border-b border-dashed border-[#ddd]" href="/dong-ho-co-dien">Đồng hồ Cổ điển</a>

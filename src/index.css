@@ -77,3 +77,22 @@ input[type='search']:focus, input[type='number']:focus, input[type='tel']:focus,
  .bg-fill  {
   background-position: 50% 50% !important;
  }
+
+ /* Slider Track */
+.ant-slider-track {
+  background-color: #ababab !important;
+}
+
+/* Slider Handle */
+.ant-slider-handle {
+  border-color: #ababab !important;
+}
+
+/* Slider Rail */
+.ant-slider-rail {
+  background-color: #ddd !important;
+}
+.ant-slider .ant-slider-handle::after{
+  background-color: #666666 !important;
+  box-shadow: 0 0 0 2px #ababab !important;
+}
