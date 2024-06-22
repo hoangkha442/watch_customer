@@ -13,15 +13,26 @@ const HeaderMain = () => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.user.userInfo);
   const cartItems = useSelector(state => state.cart.items);
-  const cartStatus = useSelector(state => state.cart.status);
-
+  const [isHidden, setIsHidden] = useState(false);
   const [searchItem, setSearchItem] = useState('')
+
   useEffect(() => {
     dispatch(fetchUserProfile());
     setTimeout(() => {
       dispatch(fetchCart());
     }, 100);
   }, [dispatch]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsHidden(window.scrollY > 300);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   const handleLogout = () => {
     navigate("/");
@@ -81,24 +92,18 @@ const HeaderMain = () => {
     },
   ];
 
-  // function getFirstAndLastChars(names) {
-  //   const words = names.trim().split(' ');
-  //   const firstWord = words[0];
-  //   const lastWord = words[words.length - 1];
-  //   return firstWord.charAt(0) + lastWord.charAt(lastWord.length - 1);
-  // }
-
   const handleSearch = (event) => { 
     event.preventDefault();
     navigate(`/search?q=${searchItem}`)
   }
+  
   const handleOnchange = (event) => { 
     let {value} = event.target
     setSearchItem(value)  
   }
 
   return (
-    <div className=" bg-[#333333] text-white py-4 relative border-b border-t border-gray-700" style={{ height: '100px', zIndex: 10 }}>
+    <div className={`bg-[#333333] text-white py-4 relative border-b border-t border-gray-700 transition-all duration-300 ${isHidden ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} style={{ height: '100px', zIndex: 10 }}>
       <div className="header-inner flex flex-row justify-between items-center container mx-auto">
 
         {/* Logo */}
@@ -130,7 +135,6 @@ const HeaderMain = () => {
               placement="bottom"
               arrow
             >
-              {/* {getFirstAndLastChars(user?.full_name)} */}
               <Avatar className='cursor-pointer' onClick={() => { navigate('/profile') }}></Avatar>
             </Dropdown> : <a href="/dang-nhap" className="text-sm mx-2 hover:text-gray-300 flex items-center roboto-medium mr-4">
               ĐĂNG NHẬP

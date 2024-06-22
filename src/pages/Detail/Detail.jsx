@@ -19,7 +19,7 @@ const Detail = () => {
   const [mainImageIndex, setMainImageIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
-  const [activeTab, setActiveTab] = useState('description');
+  const [activeTab, setActiveTab] = useState('related');
   const [relatedProducts, setRelatedProducts] = useState([]);
 
   useEffect(() => {
@@ -118,7 +118,6 @@ const Detail = () => {
       {/* Tab Navigation */}
       <div className="mt-8">
         <div className="flex space-x-2 border-b border-[#ddd]">
-          <TabButton label="MÔ TẢ" activeTab={activeTab} tabKey="description" setActiveTab={setActiveTab} />
           <TabButton label="CÁC SẢN PHẨM LIÊN QUAN" activeTab={activeTab} tabKey="related" setActiveTab={setActiveTab} />
           <TabButton label="ĐÁNH GIÁ" activeTab={activeTab} tabKey="review-form" setActiveTab={setActiveTab} />
           <TabButton label="ĐÁNH GIÁ CỦA MỌI NGƯỜI" activeTab={activeTab} tabKey="reviews" setActiveTab={setActiveTab} />
@@ -126,7 +125,6 @@ const Detail = () => {
 
         {/* Tab Content */}
         <div className='border-x border-b border-[#ddd] p-4'>
-          {activeTab === 'description' && <Description productDetail={productDetail} />}
           {activeTab === 'related' && <RelatedProducts relatedProducts={relatedProducts} handleAddToCart={handleAddToCart} />}
           {activeTab === 'review-form' && <ProductReviews productDetail={productDetail} onlyForm setActiveTab={setActiveTab} />}
           {activeTab === 'reviews' && <ProductReviews productDetail={productDetail} onlyList setActiveTab={setActiveTab} />}

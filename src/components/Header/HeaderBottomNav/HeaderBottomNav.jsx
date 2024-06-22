@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 const navLinks = [
@@ -12,11 +12,23 @@ const navLinks = [
 
 const HeaderBottomNav = () => {
   const location = useLocation();
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 300);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   const isActive = (pathname) => location.pathname === pathname;
 
   return (
-    <div className="header-bottom bg-[#333333] border-t border-b border-gray-700 roboto-regular h-full">
+    <div className={`header-bottom bg-[#333333] border-t border-b border-gray-700 roboto-regular transition-all duration-300 ${isScrolled ? 'fixed w-full top-0 left-0 z-[99] transition-all duration-500' : ''}`}>
       <div className="container mx-auto h-full">
         <ul className="flex uppercase text-white text-sm justify-center items-center py-4 space-x-16">
           {navLinks.map((link) => (

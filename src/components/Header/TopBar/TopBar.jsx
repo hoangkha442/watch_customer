@@ -1,14 +1,27 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaFacebook, FaInstagram, FaTwitter, FaMapMarkerAlt, FaPhone } from 'react-icons/fa';
 
 export default function TopBar() {
+  const [isHidden, setIsHidden] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsHidden(window.scrollY > 300);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
-    <div id="top-bar" className="bg-[#333333] text-white p-3 hidden md:flex md:justify-between roboto-regular">
+    <div id="top-bar" className={`bg-[#333333] text-white p-3 hidden md:flex md:justify-between roboto-regular transition-opacity duration-300 ${isHidden ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
       <div className="container mx-auto flex flex-wrap items-center">
         <div className="w-full md:w-auto md:flex-1 flex justify-start">
           <ul className="flex list-none p-0 m-0">
             <li className="mr-6 flex items-center gap-1">
-                <FaMapMarkerAlt  className='text-lg'/>
+                <FaMapMarkerAlt className='text-lg'/>
               <p className="text-sm">319 - C16 Lý Thường Kiệt, P.15, Q.11, Tp.HCM</p>
             </li>
             <li>
