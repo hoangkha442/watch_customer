@@ -22,4 +22,7 @@ export const ProductService = {
     getProductId: async (productId) => {
       return await https.get(`/product/get-product/${productId}`)
     },
+    getRelatedProduct: async (productId) => {
+      return await https.get(`/product/related-products/${productId}`)
+    },
 }

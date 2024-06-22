@@ -31,4 +31,18 @@ export const UserServices = {
   createMultipleOrders: async (orders) => {
     return await https.post(`/order/create-multiple`, orders);
   },
+
+  // Review services
+  createReview: async (data) => {
+    return await https.post(`/review`, data);
+  },
+  getReviewsByProductId: async (productId) => {
+    return await https.get(`/review/product/${productId}`);
+  },
+  updateReview: async (reviewId, data) => {
+    return await https.put(`/review/${reviewId}`, data);
+  },
+  deleteReview: async (reviewId) => {
+    return await https.delete(`/review/${reviewId}`);
+  },
 };

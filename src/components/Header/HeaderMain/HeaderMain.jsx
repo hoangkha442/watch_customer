@@ -12,7 +12,6 @@ const HeaderMain = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector(state => state.user.userInfo);
-  console.log('user: ', user);
   const cartItems = useSelector(state => state.cart.items);
   const cartStatus = useSelector(state => state.cart.status);
 
