@@ -62,7 +62,7 @@ export default function Login() {
       setFormError('');
       navigate('/');
 
-        window.location.reload()
+        // window.location.reload()
     } catch (err) {
       console.log('err: ', err);
       Swal.fire({

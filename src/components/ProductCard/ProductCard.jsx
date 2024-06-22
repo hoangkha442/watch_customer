@@ -2,7 +2,11 @@ import { useNavigate } from "react-router-dom";
 import { BASE_URL_IMG } from "../../services/config";
 
 export const ProductCard = ({ product, handleAddToCart }) => {
+  console.log('product: ', product);
   const navigate = useNavigate();
+
+  // Kiểm tra nếu có ít nhất một ảnh trong mảng
+  const firstImageUrl = product.product_images.length > 0 ? product.product_images[0].image_url : '';
 
   return (
     <div className="max-w-sm bg-white rounded-lg border border-gray-200 shadow-md overflow-hidden relative">
@@ -17,7 +21,7 @@ export const ProductCard = ({ product, handleAddToCart }) => {
             navigate(`/san-pham/${product.product_id}`);
           }}
           className="object-cover w-full h-[250px] hover:scale-110 transition-all duration-300 cursor-pointer"
-          src={BASE_URL_IMG + product.product_picture}
+          src={BASE_URL_IMG + firstImageUrl}
           alt={product.product_name}
         />
       </div>

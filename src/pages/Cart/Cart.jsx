@@ -69,7 +69,7 @@ const Cart = () => {
       total_amount: item.products.price * item.quantity,
       details: [
         {
-          product_id: item.product_id,
+          product_id: item.product_id * 1,
           quantity: item.quantity,
           price: item.products.price,
         }

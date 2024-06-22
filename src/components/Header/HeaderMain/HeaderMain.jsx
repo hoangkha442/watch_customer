@@ -12,6 +12,7 @@ const HeaderMain = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector(state => state.user.userInfo);
+  console.log('user: ', user);
   const cartItems = useSelector(state => state.cart.items);
   const cartStatus = useSelector(state => state.cart.status);
 
@@ -81,12 +82,12 @@ const HeaderMain = () => {
     },
   ];
 
-  function getFirstAndLastChars(names) {
-    const words = names.trim().split(' ');
-    const firstWord = words[0];
-    const lastWord = words[words.length - 1];
-    return firstWord.charAt(0) + lastWord.charAt(lastWord.length - 1);
-  }
+  // function getFirstAndLastChars(names) {
+  //   const words = names.trim().split(' ');
+  //   const firstWord = words[0];
+  //   const lastWord = words[words.length - 1];
+  //   return firstWord.charAt(0) + lastWord.charAt(lastWord.length - 1);
+  // }
 
   const handleSearch = (event) => { 
     event.preventDefault();
@@ -130,7 +131,8 @@ const HeaderMain = () => {
               placement="bottom"
               arrow
             >
-              <Avatar className='cursor-pointer' onClick={() => { navigate('/profile') }}>{getFirstAndLastChars(user?.full_name)}</Avatar>
+              {/* {getFirstAndLastChars(user?.full_name)} */}
+              <Avatar className='cursor-pointer' onClick={() => { navigate('/profile') }}></Avatar>
             </Dropdown> : <a href="/dang-nhap" className="text-sm mx-2 hover:text-gray-300 flex items-center roboto-medium mr-4">
               ĐĂNG NHẬP
             </a>

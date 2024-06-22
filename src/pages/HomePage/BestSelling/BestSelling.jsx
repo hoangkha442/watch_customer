@@ -29,9 +29,9 @@ export default function BestSelling() {
       });
   }, []);
 
-  const handleAddToCart = (product_id) => {
-    dispatch(addToCart({ product_id, quantity: 1 }))
-      .then(() => {
+  const handleAddToCart = (product) => {
+    dispatch(addToCart({ product_id: product.product_id * 1, quantity: 1 }))
+    .then(() => {
         message.success('Thêm sản phẩm vào giỏ hàng thành công!');
       })
       .catch((error) => {

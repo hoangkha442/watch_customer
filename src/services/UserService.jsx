@@ -6,7 +6,7 @@ export const UserServices = {
     return await https.post(`/auth/login`, data);
   },
   getProfile: async () => {
-    return await https.get(`/user/my-info`);
+    return await https.get(`/user/get-info`);
   },
 
   // CART service
