@@ -15,6 +15,7 @@ import Contact from './pages/Contact/Contact';
 import Detail from './pages/Detail/Detail';
 import Cart from './pages/Cart/Cart';
 import Login from './pages/Login/Login';
+import PaymentPage from './pages/PaymentPage/PaymentPage';
 function App() {
   return (
     
@@ -29,6 +30,7 @@ function App() {
         <Route path='/lien-he' element={<Contact />}/>
         <Route path='/san-pham/:id' element={<Detail />}/>
         <Route path='/gio-hang' element={<Cart />}/>
+        <Route path="/thanh-toan" element={<PaymentPage />} />
         <Route path="/search" element={<Search />} />
         <Route path="/dang-nhap" element={<Login />} />
       </Routes>

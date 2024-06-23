@@ -98,3 +98,17 @@ input[type='search']:focus, input[type='number']:focus, input[type='tel']:focus,
   background-color: #666666 !important;
   box-shadow: 0 0 0 2px #ababab !important;
 }
+
+.ant-collapse-expand-icon{
+  display: none !important;
+}
+
+.ant-collapse-header{
+  background: white !important; 
+}
+.ant-collapse-item, .ant-collapse{
+  border: none !important;
+}
+.ant-collapse-content-box{
+  padding: 0px !important;
+}

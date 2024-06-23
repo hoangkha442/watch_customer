@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux'; // Import useDispatch and useSelector from react-redux
+import Swal from 'sweetalert2'; // Import Swal
 import { FaHeart } from 'react-icons/fa';
 import Modal from 'react-modal';
 
-// Import hình ảnh
+// Import images
 import logoGHN from '../../asset/img/logo-ghn.jpg';
 import logoGHTK from '../../asset/img/logo-ghtk.jpg';
 import logoNinjaVan from '../../asset/img/logo-ninja-van.jpg';
@@ -15,12 +17,48 @@ import logoVIB from '../../asset/img/logo-vib.jpg';
 import logoVCB from '../../asset/img/logo-vcb.jpg';
 import logoPayPal from '../../asset/img/logo-paypal.jpg';
 import logoMasterCard from '../../asset/img/logo-mastercard.jpg';
+import { addToCart } from '../../redux/CartSlice';
 
 Modal.setAppElement('#root'); // Thiết lập gốc của ứng dụng cho modal
 
 const ProductInfo = ({ productDetail, quantity, increment, decrement }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalImage, setModalImage] = useState('');
+  const dispatch = useDispatch(); // Initialize useDispatch
+  const user = useSelector(state => state.user.userInfo); // Get user info from Redux state
+
+  // Function to handle adding to cart
+  const handleAddToCart = () => {
+    if (!user) {
+      Swal.fire({
+        title: 'Cảnh báo!',
+        text: 'Bạn cần đăng nhập để thêm sản phẩm vào giỏ hàng.',
+        icon: 'warning',
+        confirmButtonText: 'Đóng'
+      });
+      return;
+    }
+
+    dispatch(addToCart({ product_id: productDetail.product_id, quantity }))
+      .unwrap() // Handle the fulfilled or rejected action
+      .then(() => {
+        Swal.fire({
+          title: 'Thành công!',
+          text: 'Thêm sản phẩm vào giỏ hàng thành công!',
+          icon: 'success',
+          confirmButtonText: 'Đóng'
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+        Swal.fire({
+          title: 'Lỗi!',
+          text: error.message || 'Thêm sản phẩm vào giỏ hàng thất bại.',
+          icon: 'error',
+          confirmButtonText: 'Đóng'
+        });
+      });
+  };
 
   const openModal = (image) => {
     setModalImage(image);
@@ -43,16 +81,15 @@ const ProductInfo = ({ productDetail, quantity, increment, decrement }) => {
         <h2 className="text-2xl font-bold text-gray-800 pt-2 md:mt-0 uppercase">{productDetail?.product_name}</h2>
         <div className="h-[3px] bg-gray-200 my-4 w-full max-w-[30px]"></div>
       </div>
-        <div className="flex text-gray-600 text-2xl gap-2 mt-0">
-          {productDetail?.promotion_percentage > 0 && (
-            <p className="line-through decoration-gray-500">{productDetail?.price.toLocaleString()} ₫</p>
-          )}
-          <p className="font-bold text-[#c89979]">
-            {(productDetail?.price - (productDetail?.price * productDetail?.promotion_percentage / 100)).toLocaleString()} ₫
-          </p>
-        </div>
-        <p className="mt-4 text-gray-700">{productDetail?.description}</p>
-
+      <div className="flex text-gray-600 text-2xl gap-2 mt-0">
+        {productDetail?.promotion_percentage > 0 && (
+          <p className="line-through decoration-gray-500">{productDetail?.price.toLocaleString()} ₫</p>
+        )}
+        <p className="font-bold text-[#c89979]">
+          {(productDetail?.price - (productDetail?.price * productDetail?.promotion_percentage / 100)).toLocaleString()} ₫
+        </p>
+      </div>
+      <p className="mt-4 text-gray-700">{productDetail?.description}</p>
 
       <ul className='list-disc pl-5 text-gray-800'>
         <li className='mt-3'><span className="font-semibold">Thương hiệu:</span> {productDetail?.suppliers?.supplier_name}</li>
@@ -62,29 +99,31 @@ const ProductInfo = ({ productDetail, quantity, increment, decrement }) => {
       </ul>
 
       <div className="flex items-center mt-5">
-            <button
-              className="bg-gray-100 border border-gray-300 text-gray-700 hover:bg-gray-100 px-3 py-2"
-              onClick={decrement}
-            >
-              -
-            </button>
-            <input
-              type="text"
-              value={quantity}
-              className="text-center w-10 border border-gray-300 py-2"
-            />
-            <button
-              className="bg-gray-100 border border-gray-300 text-gray-700 hover:bg-gray-100 px-3 py-2"
-              onClick={increment}
-            >
-              +
-            </button>
-            <button
-              className="bg-[#d26e4b] text-white px-6 py-2 rounded-sm hover:bg-orange-500 ml-4"
-            >
-              THÊM VÀO GIỎ
-            </button>
-          </div>
+        <button
+          className="bg-gray-100 border border-gray-300 text-gray-700 hover:bg-gray-100 px-3 py-2"
+          onClick={decrement}
+        >
+          -
+        </button>
+        <input
+          type="text"
+          value={quantity}
+          readOnly
+          className="text-center w-10 border border-gray-300 py-2"
+        />
+        <button
+          className="bg-gray-100 border border-gray-300 text-gray-700 hover:bg-gray-100 px-3 py-2"
+          onClick={increment}
+        >
+          +
+        </button>
+        <button
+          className="bg-[#d26e4b] text-white px-6 py-2 rounded-sm hover:bg-orange-500 ml-4"
+          onClick={handleAddToCart} // Call the handleAddToCart function
+        >
+          THÊM VÀO GIỎ
+        </button>
+      </div>
 
       {/* Phần hiển thị logo vận chuyển và thanh toán */}
       <div className="border-t border-gray-200 pt-4">

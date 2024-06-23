@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 import { BASE_URL_IMG } from "../../services/config";
 
 export const ProductCard = ({ product, handleAddToCart }) => {
-  console.log('product: ', product);
   const navigate = useNavigate();
 
   // Kiểm tra nếu có ít nhất một ảnh trong mảng

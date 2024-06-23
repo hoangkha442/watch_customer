@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
 import { ProductService } from '../../services/productService';
+import { UserServices } from '../../services/UserService';
+import Swal from 'sweetalert2'; // Import Swal
 import Modal from 'react-modal';
 import MainImage from './MainImage';
 import Thumbnails from './Thumbnails';
@@ -9,11 +11,18 @@ import ProductReviews from './ProductReviews';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { BASE_URL_IMG } from '../../services/config';
 import { ProductCard } from '../../components/ProductCard/ProductCard';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCart, fetchCart } from '../../redux/CartSlice';
 
 Modal.setAppElement('#root');
 
 const Detail = () => {
   const { id } = useParams();
+  const dispatch = useDispatch();
+  const user = useSelector(state => state.user.userInfo);
+  const cartStatus = useSelector(state => state.cart.status); // To observe cart state
+  const cartError = useSelector(state => state.cart.error); // To observe cart error
+
   const [quantity, setQuantity] = useState(1);
   const [productDetail, setProductDetail] = useState(null);
   const [mainImageIndex, setMainImageIndex] = useState(0);
@@ -37,6 +46,12 @@ const Detail = () => {
     }
   }, [id]);
 
+  useEffect(() => {
+    // Fetch cart items when the component mounts or cart state changes
+    if (user) {
+      dispatch(fetchCart());
+    }
+  }, [dispatch, user, cartStatus]); 
   const increment = () => setQuantity(quantity + 1);
   const decrement = () => setQuantity(quantity > 1 ? quantity - 1 : 1);
 
@@ -76,8 +91,35 @@ const Detail = () => {
   };
 
   const handleAddToCart = (product) => {
-    // Implement logic to add product to cart
-    console.log("Add to cart:", product);
+    if (!user) {
+      Swal.fire({
+        title: 'Cảnh báo!',
+        text: 'Bạn cần đăng nhập để thêm sản phẩm vào giỏ hàng.',
+        icon: 'warning',
+        confirmButtonText: 'Đóng'
+      });
+      return;
+    }
+
+    dispatch(addToCart({ product_id: product.product_id, quantity }))
+      .unwrap()
+      .then(() => {
+        Swal.fire({
+          title: 'Thành công!',
+          text: 'Thêm sản phẩm vào giỏ hàng thành công!',
+          icon: 'success',
+          confirmButtonText: 'Đóng'
+        });
+      })
+      .catch((error) => {
+        console.error("Error adding to cart:", error);
+        Swal.fire({
+          title: 'Lỗi!',
+          text: error.message || 'Thêm sản phẩm vào giỏ hàng thất bại.',
+          icon: 'error',
+          confirmButtonText: 'Đóng'
+        });
+      });
   };
 
   return (

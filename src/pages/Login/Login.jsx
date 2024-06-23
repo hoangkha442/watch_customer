@@ -53,7 +53,9 @@ export default function Login() {
       });
       dispatch(setLogin(response.data));
       userLocalStorage.set(response.data);
-
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
       if (rememberMe) {
         localStorage.setItem('user', JSON.stringify(response.data));
       } else {
