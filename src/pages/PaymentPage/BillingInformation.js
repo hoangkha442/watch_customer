@@ -1,9 +1,9 @@
 // src/components/BillingInformation.js
 import React from 'react';
 
-const BillingInformation = ({ formData, handleChange, errors, provinces }) => {
+const BillingInformation = ({ formData, handleChange, errors }) => {
   return (
-    <div className='p-4 border-t-2 border-[#ddd]'>
+    <div className="p-4 border-t-2 border-[#ddd]">
       <h1 className="text-[1.1em] overflow-hidden pt-2 pb-4 font-bold uppercase text-[#1c1c1c]">Thông Tin Thanh Toán</h1>
       <form className="space-y-6">
         <div>
@@ -14,9 +14,9 @@ const BillingInformation = ({ formData, handleChange, errors, provinces }) => {
             value={formData.fullName}
             onChange={handleChange}
             required
-            className={`mt-1 block w-full p-2 px-3 h-[2.507em] text-[.97em] bg-white text-[#333] border border-[#ddd] shadow-inner transition-colors duration-300 ease-in-out ${errors.fullName ? 'border-red-500' : ''}`}
+            className={`mt-1 block w-full p-2 px-3 h-[2.507em] text-[.97em] bg-white text-[#333] border ${errors.fullName ? 'border-red-500' : 'border-[#ddd]'} shadow-inner transition-colors duration-300 ease-in-out`}
           />
-          {errors.fullName && <p className="text-red-500 text-sm">{errors.fullName}</p>}
+          {errors.fullName && <p className="text-red-500 text-xs mt-1">{errors.fullName}</p>}
         </div>
         <div className="flex space-x-4">
           <div className="flex-1">
@@ -27,9 +27,9 @@ const BillingInformation = ({ formData, handleChange, errors, provinces }) => {
               value={formData.phone}
               onChange={handleChange}
               required
-              className={`mt-1 block w-full p-2 px-3 h-[2.507em] text-[.97em] bg-white text-[#333] border border-[#ddd] shadow-inner transition-colors duration-300 ease-in-out ${errors.phone ? 'border-red-500' : ''}`}
+              className={`mt-1 block w-full p-2 px-3 h-[2.507em] text-[.97em] bg-white text-[#333] border ${errors.phone ? 'border-red-500' : 'border-[#ddd]'} shadow-inner transition-colors duration-300 ease-in-out`}
             />
-            {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
+            {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
           </div>
           <div className="flex-1">
             <label className="block text-[.9em] mb-[.4em] font-bold text-[#222]">Địa chỉ email *</label>
@@ -39,9 +39,9 @@ const BillingInformation = ({ formData, handleChange, errors, provinces }) => {
               value={formData.email}
               onChange={handleChange}
               required
-              className={`mt-1 block w-full p-2 px-3 h-[2.507em] text-[.97em] bg-white text-[#333] border border-[#ddd] shadow-inner transition-colors duration-300 ease-in-out ${errors.email ? 'border-red-500' : ''}`}
+              className={`mt-1 block w-full p-2 px-3 h-[2.507em] text-[.97em] bg-white text-[#333] border ${errors.email ? 'border-red-500' : 'border-[#ddd]'} shadow-inner transition-colors duration-300 ease-in-out`}
             />
-            {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+            {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
           </div>
         </div>
         <div>
@@ -64,25 +64,21 @@ const BillingInformation = ({ formData, handleChange, errors, provinces }) => {
             value={formData.address}
             onChange={handleChange}
             required
-            className={`mt-1 block w-full p-2 px-3 h-[2.507em] text-[.97em] bg-white text-[#333] border border-[#ddd] shadow-inner transition-colors duration-300 ease-in-out ${errors.address ? 'border-red-500' : ''}`}
+            className={`mt-1 block w-full p-2 px-3 h-[2.507em] text-[.97em] bg-white text-[#333] border ${errors.address ? 'border-red-500' : 'border-[#ddd]'} shadow-inner transition-colors duration-300 ease-in-out`}
           />
-          {errors.address && <p className="text-red-500 text-sm">{errors.address}</p>}
+          {errors.address && <p className="text-red-500 text-xs mt-1">{errors.address}</p>}
         </div>
         <div>
           <label className="block text-[.9em] mb-[.4em] font-bold text-[#222]">Tỉnh / Thành phố *</label>
-          <select
+          <input
+            type="text"
             name="city"
             value={formData.city}
             onChange={handleChange}
             required
-            className={`mt-1 block w-full p-2 px-3 h-[2.507em] text-[.97em] bg-white text-[#333] border border-[#ddd] shadow-inner transition-colors duration-300 ease-in-out ${errors.city ? 'border-red-500' : ''}`}
-          >
-            <option value="">Chọn tỉnh/thành phố</option>
-            {provinces.map(province => (
-              <option key={province.province_id} value={province.province_name}>{province.province_name}</option>
-            ))}
-          </select>
-          {errors.city && <p className="text-red-500 text-sm">{errors.city}</p>}
+            className={`mt-1 block w-full p-2 px-3 h-[2.507em] text-[.97em] bg-white text-[#333] border ${errors.city ? 'border-red-500' : 'border-[#ddd]'} shadow-inner transition-colors duration-300 ease-in-out`}
+          />
+          {errors.city && <p className="text-red-500 text-xs mt-1">{errors.city}</p>}
         </div>
       </form>
     </div>

@@ -3,10 +3,10 @@ import React from 'react';
 
 const OrderSummary = ({ cartItems, subtotal, formData, setFormData, handlePayment }) => {
   return (
-    <div className="p-6 has-border rounded-sm border-2 border-[#c89979] py-4 px-8" >
+    <div className="p-6 has-border rounded-sm border-2 border-[#c89979] py-4 px-8">
       <h2 className="text-[1.1em] overflow-hidden pt-2 pb-4 font-bold uppercase text-[#1c1c1c]">Đơn Hàng Của Bạn</h2>
       <div className="mb-4">
-        <div className="flex justify-between mb-2  border-b-[3px] border-[#ececec] pb-2">
+        <div className="flex justify-between mb-2 border-b-[3px] border-[#ececec] pb-2">
           <span className='text-left leading-[1.3] text-[.9em] font-bold text-[#1c1c1c] uppercase'>Sản phẩm</span>
           <span className='text-left leading-[1.3] text-[.9em] font-bold text-[#1c1c1c] uppercase'>Tổng</span>
         </div>
@@ -16,7 +16,7 @@ const OrderSummary = ({ cartItems, subtotal, formData, setFormData, handlePaymen
             <span className='inline text-[14.4px] font-bold leading-[18.72px] text-[#111]'>{(item.products.price * item.quantity).toLocaleString()} ₫</span>
           </div>
         ))}
-        <div className="flex justify-between mb-2 py  border-b border-[#ececec] py-[.5em]">
+        <div className="flex justify-between mb-2 py border-b border-[#ececec] py-[.5em]">
           <span className='text-[13.6px] font-bold leading-[14.28px] text-[#353535]'>Tổng phụ</span>
           <span className='inline text-[14.4px] font-bold leading-[18.72px] text-[#111]'>{subtotal.toLocaleString()} ₫</span>
         </div>

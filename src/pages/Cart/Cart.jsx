@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchCart } from '../../redux/CartSlice';
 import { UserServices } from '../../services/UserService';
 import Swal from 'sweetalert2';
+import GetMoreInfo from '../HomePage/GetMoreInfo/GetMoreInfo';
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -110,31 +111,35 @@ const Cart = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6">Giỏ Hàng</h1>
+    <div className="container mx-auto px-4  pt-10">
       {cartUpdated && (
         <div className="mb-4 text-green-600">
           <span>Giỏ hàng đã được cập nhật.</span>
         </div>
       )}
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-        <div className="md:col-span-3">
-          <div className="border-b-2 pb-2 mb-4 grid grid-cols-5 gap-4">
-            <div></div> {/* Empty header for delete button column */}
-            <div>SẢN PHẨM</div>
-            <div>GIÁ</div>
-            <div>SỐ LƯỢNG</div>
-            <div>TỔNG</div>
-          </div>
-          {localCartItems.map(item => (
-            <CartItem key={item.cart_id} item={item} onQuantityChange={handleQuantityChange} onDelete={handleDeleteItem} />
-          ))}
-          <div className="flex justify-between mt-6">
+        <div className="md:col-span-3 pr-6">
+        <table className="w-full text-[#353535] text-sm uppercase font-bold">
+          <thead>
+            <tr className="border-b-[3px]">
+              <th className="pb-2 text-start"><p>SẢN PHẨM</p></th>
+              <th className="pb-2 text-start">GIÁ</th>
+              <th className="pb-2">SỐ LƯỢNG</th>
+              <th className="pb-2 text-end"><p>TỔNG</p></th>
+            </tr>
+          </thead>
+          <tbody>
+            {localCartItems.map(item => (
+              <CartItem key={item.cart_id} item={item} onQuantityChange={handleQuantityChange} onDelete={handleDeleteItem} />
+            ))}
+          </tbody>
+        </table>
+          <div className="flex justify-start gap-6 mt-6">
             <button className="px-4 py-2 border-[1.6px] border-[#c89979] text-[#c89979] font-medium text-sm">
               <span className='mr-3'>←</span> TIẾP TỤC XEM SẢN PHẨM
             </button>
-            <button onClick={handleUpdateCart} className="px-4 py-2 bg-gray-300 text-gray-700">CẬP NHẬT GIỎ HÀNG</button>
-            <button onClick={handleDeleteMultipleCartItems} className="px-4 py-2 bg-red-500 text-white">XÓA TẤT CẢ</button>
+            <button onClick={handleUpdateCart} className="px-4 py-2 bg-[#c89979] text-[#fff] text-sm font-medium tracking-widest font-[roboto]">CẬP NHẬT GIỎ HÀNG</button>
+            {/* <button onClick={handleDeleteMultipleCartItems} className="px-4 py-2 bg-red-500 text-white">XÓA TẤT CẢ</button> */}
             {/* <button onClick={handleCheckout} className="px-4 py-2 bg-orange-500 text-white font-bold rounded-lg mb-4">TIẾN HÀNH THANH TOÁN</button> */}
           </div>
         </div>
@@ -142,6 +147,10 @@ const Cart = () => {
           <CartSummary subtotal={subtotal} handleCheckout={handleCheckout}/>
         </div>
       </div>
+      <div className='pt-[70px]'>
+        <GetMoreInfo />
+      </div>
+
     </div>
   );
 };

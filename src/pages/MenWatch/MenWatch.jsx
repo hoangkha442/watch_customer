@@ -25,26 +25,34 @@ export default function MenWatch() {
   const sortingOptions = ['Thứ tự mặc định', 'Thứ tự theo mức độ phổ biến', 'Thứ tự theo điểm đánh giá', 'Giá từ cao đến thấp', 'Giá từ thấp đến cao', 'Đang giảm giá'];
 
   useEffect(() => {
-    ProductService.getProduct().then((res) => {
-      const filtered = res.data
-        .filter((product) => product.category_id === 1)
-        .map(product => {
-          const discountedPrice = product.price - (product.price * product.promotion_percentage / 100);
-          return { ...product, discountedPrice };
-        });
-      setProducts(filtered);
-      applyFilterAndSort(filtered, sortOption, priceRange); 
+    ProductService.getProduct()
+      .then((res) => {
+        if (res && res.data && Array.isArray(res.data)) {
+          const filtered = res.data
+            .filter((product) => product.category_id === 1)
+            .map(product => {
+              const discountedPrice = product.price - (product.price * product.promotion_percentage / 100);
+              return { ...product, discountedPrice };
+            });
+          setProducts(filtered);
+          applyFilterAndSort(filtered, sortOption, priceRange); 
 
-      if (filtered.length > 0) {
-        const prices = filtered.map(product => product.discountedPrice);
-        const minPrice = Math.min(...prices);
-        const maxPrice = Math.max(...prices);
-        setMinPrice(minPrice);
-        setMaxPrice(maxPrice);
-        setPriceRange([minPrice, maxPrice]);
-        setTempPriceRange([minPrice, maxPrice]);
-      }
-    }).catch((err) => { console.error(err); });
+          if (filtered.length > 0) {
+            const prices = filtered.map(product => product.discountedPrice);
+            const minPrice = Math.min(...prices);
+            const maxPrice = Math.max(...prices);
+            setMinPrice(minPrice);
+            setMaxPrice(maxPrice);
+            setPriceRange([minPrice, maxPrice]);
+            setTempPriceRange([minPrice, maxPrice]);
+          }
+        } else {
+          console.error("Unexpected response structure:", res);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }, []);
 
   const handleAddToCart = (product_id) => {
@@ -73,6 +81,8 @@ export default function MenWatch() {
   };
 
   const applyFilterAndSort = (products, sortOption, priceRange) => {
+    if (!Array.isArray(products)) return;
+
     const [minPrice, maxPrice] = priceRange;
     let filtered = products.filter(product => product.discountedPrice >= minPrice && product.discountedPrice <= maxPrice);
 
@@ -104,7 +114,8 @@ export default function MenWatch() {
 
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = startIndex + pageSize;
-  const currentProducts = filteredProducts.slice(startIndex, endIndex);
+  const currentProducts = Array.isArray(filteredProducts) ? filteredProducts.slice(startIndex, endIndex) : [];
+  console.log('currentProducts: ', currentProducts);
 
   return (
     <div className='container pt-16'>
@@ -149,19 +160,19 @@ export default function MenWatch() {
         </div>
         <div className="flex flex-col w-full">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {
-              currentProducts.map((product) => {
-                return (
-                  <ProductCard key={product.product_id} product={product} handleAddToCart={handleAddToCart} />
-                )
-              })
-            }
+            {currentProducts.length > 0 ? (
+              currentProducts.map((product) => (
+                <ProductCard key={product.product_id} product={product} handleAddToCart={handleAddToCart} />
+              ))
+            ) : (
+              <p>No products found.</p>
+            )}
           </div>
           <div className="flex justify-center mt-8">
             <Pagination
               current={currentPage}
               pageSize={pageSize}
-              total={filteredProducts.length}
+              // total={filteredProducts.length}
               onChange={handlePageChange}
               showSizeChanger={false}
             />

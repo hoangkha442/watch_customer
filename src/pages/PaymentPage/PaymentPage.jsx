@@ -1,17 +1,19 @@
 // src/components/PaymentPage.js
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import BillingInformation from './BillingInformation';
 import OrderSummary from './OrderSummary';
+import { UserServices } from '../../services/UserService';
+import { fetchCart } from '../../redux/CartSlice';
 
 const PaymentPage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const user = useSelector(state => state.user.userInfo);
   const cartItems = useSelector(state => state.cart.items);
 
-  // Calculate subtotal from cart items
   const subtotal = cartItems.reduce((total, item) => total + item.products.price * item.quantity, 0);
 
   const [formData, setFormData] = useState({
@@ -24,24 +26,8 @@ const PaymentPage = () => {
     paymentMethod: 'COD',
   });
 
-  const [provinces, setProvinces] = useState([]);
   const [errors, setErrors] = useState({});
 
-  // Fetch provinces from the API
-  useEffect(() => {
-    const fetchProvinces = async () => {
-      try {
-        const response = await fetch('https://vapi.vnappmob.com/api/province');
-        const data = await response.json();
-        setProvinces(data.results);
-      } catch (error) {
-        console.error('Error fetching provinces:', error);
-      }
-    };
-    fetchProvinces();
-  }, []);
-
-  // Pre-fill form with user data
   useEffect(() => {
     if (user) {
       setFormData({
@@ -74,7 +60,7 @@ const PaymentPage = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handlePayment = () => {
+  const handlePayment = async () => {
     if (!validateForm()) {
       Swal.fire({
         icon: 'error',
@@ -84,15 +70,57 @@ const PaymentPage = () => {
       return;
     }
 
-    Swal.fire({
-      position: "center",
-      icon: "success",
-      title: "Thanh toán thành công!",
-      showConfirmButton: false,
-      timer: 1500,
-    }).then(() => {
-      navigate('/'); // Navigate to the home page or order confirmation page after payment
-    });
+    try {
+      const orderData = {
+        orders: [{
+          company_id: 1,
+          order_date: new Date().toISOString(),
+          status: 'pending',
+          total_amount: subtotal,
+          details: cartItems.map(item => ({
+            product_id: item.product_id,
+            quantity: item.quantity,
+            price: item.products.price,
+          })),
+          productIDs: cartItems.map(item => item.product_id),
+          paymentDetail: {
+            amount: subtotal,
+            payment_method: formData.paymentMethod,
+            payment_status: 'pending',
+          },
+          shippingDetail: {
+            shipping_address: formData.address,
+            estimated_delivery_date: new Date().toISOString(),
+          }
+        }]
+      };
+
+      await UserServices.createMultipleOrders(orderData);
+
+      const deleteItems = cartItems.map(item => ({
+        cart_id: item.cart_id,
+      }));
+      await UserServices.deleteMultipleCartItems(deleteItems);
+
+      dispatch(fetchCart());
+
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Thanh toán thành công!",
+        showConfirmButton: false,
+        timer: 1500,
+      }).then(() => {
+        navigate('/');
+      });
+    } catch (error) {
+      console.error('Checkout failed:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Lỗi',
+        text: 'Đã xảy ra lỗi khi thanh toán. Vui lòng thử lại.',
+      });
+    }
   };
 
   return (
@@ -103,7 +131,6 @@ const PaymentPage = () => {
             formData={formData} 
             handleChange={handleChange} 
             errors={errors}
-            provinces={provinces}
           />
         </div>
         <div className="md:col-span-4">
