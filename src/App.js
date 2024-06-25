@@ -17,6 +17,7 @@ import Cart from './pages/Cart/Cart';
 import Login from './pages/Login/Login';
 import PaymentPage from './pages/PaymentPage/PaymentPage';
 import Purchase from './pages/Purchase/Purchase';
+import Register from './pages/Register/Register';
 function App() {
   return (
     
@@ -35,6 +36,7 @@ function App() {
         <Route path="/search" element={<Search />} />
         <Route path="/don-hang" element={<Purchase />} />
         <Route path="/dang-nhap" element={<Login />} />
+        <Route path="/dang-ky" element={<Register />} />
       </Routes>
       <Footer />
     </Router>

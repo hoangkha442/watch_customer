@@ -6,15 +6,15 @@ import { UserServices } from '../../services/UserService';
 import { setLogin } from '../../redux/UserSlice';
 import { userLocalStorage } from '../../services/LocalService';
 
-export default function Login() {
+export default function Register() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [phone, setPhone] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
-  const [emailError, setEmailError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
   const [formError, setFormError] = useState('');
 
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -23,13 +23,21 @@ export default function Login() {
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
     setFormError('');
-    setEmailError(validateEmail(e.target.value) ? '' : 'Email không đúng định dạng.');
   };
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
     setFormError('');
-    setPasswordError(validatePassword(e.target.value) ? '' : 'Mật khẩu không được để trống.');
+  };
+
+  const handleFullNameChange = (e) => {
+    setFullName(e.target.value);
+    setFormError('');
+  };
+
+  const handlePhoneChange = (e) => {
+    setPhone(e.target.value);
+    setFormError('');
   };
 
   const handleRememberMeChange = (e) => setRememberMe(e.target.checked);
@@ -37,17 +45,17 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (emailError || passwordError || !email || !password) {
+    if (!validateEmail(email) || !validatePassword(password) || !fullName || !phone) {
       setFormError('Vui lòng nhập đúng các thông tin bên dưới.');
       return;
     }
 
     try {
-      const response = await UserServices.login({ email, password });
+      const response = await UserServices.signup({ email, password, full_name: fullName, phone });
       Swal.fire({
         position: 'center',
         icon: 'success',
-        title: 'Đăng nhập thành công!',
+        title: 'Đăng ký thành công!',
         showConfirmButton: false,
         timer: 1000,
       });
@@ -62,32 +70,46 @@ export default function Login() {
         sessionStorage.setItem('user', JSON.stringify(response.data));
       }
       setFormError('');
-      navigate('/');
+      navigate('/login');
 
     } catch (err) {
       console.log('err: ', err);
       Swal.fire({
         position: 'center',
         icon: 'error',
-        title: err.response?.data?.message || 'Đăng nhập thất bại',
+        title: err.response?.data?.message || 'Đăng ký thất bại',
         showConfirmButton: false,
         timer: 1000,
       });
-      setFormError('Đăng nhập thất bại. Vui lòng thử lại!');
+      setFormError('Đăng ký thất bại. Vui lòng thử lại!');
     }
   };
 
   return (
     <div className="flex items-center justify-center bg-[#fff] py-20">
       <div className="w-full container space-y-2 bg-[#fff]">
-        <h2 className="text-xl font-bold text-left text-[#1c1c1c]">ĐĂNG NHẬP</h2>
+        <h2 className="text-xl font-bold text-left text-[#1c1c1c]">ĐĂNG KÝ</h2>
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div>
-            <label htmlFor="email" className="block text-sm font-bold text-[#222] mb-2">
-              Tên tài khoản hoặc địa chỉ email *
+            <label htmlFor="fullName" className="block text-sm font-bold text-[#222] mb-2">
+              Họ và tên *
             </label>
             <input
               type="text"
+              id="fullName"
+              name="fullName"
+              className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-gray-300 focus:border-gray-300 sm:text-sm"
+              value={fullName}
+              onChange={handleFullNameChange}
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="email" className="block text-sm font-bold text-[#222] mb-2">
+              Địa chỉ email *
+            </label>
+            <input
+              type="email"
               id="email"
               name="email"
               className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-gray-300 focus:border-gray-300 sm:text-sm"
@@ -95,7 +117,6 @@ export default function Login() {
               onChange={handleEmailChange}
               required
             />
-            {emailError && <div className="text-red-500">{emailError}</div>}
           </div>
           <div>
             <label htmlFor="password" className="block text-sm font-bold text-[#222] mb-2">
@@ -110,7 +131,20 @@ export default function Login() {
               onChange={handlePasswordChange}
               required
             />
-            {passwordError && <div className="text-red-500">{passwordError}</div>}
+          </div>
+          <div>
+            <label htmlFor="phone" className="block text-sm font-bold text-[#222] mb-2">
+              Số điện thoại *
+            </label>
+            <input
+              type="text"
+              id="phone"
+              name="phone"
+              className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-gray-300 focus:border-gray-300 sm:text-sm"
+              value={phone}
+              onChange={handlePhoneChange}
+              required
+            />
           </div>
           {formError && <div className="text-red-500">{formError}</div>}
           <div className="flex items-center space-x-5">
@@ -118,7 +152,7 @@ export default function Login() {
               type="submit"
               className="px-4 py-2 font-bold text-white bg-[#c89979] hover:bg-[#ab8165] transition-all duration-300 focus:outline-none focus:shadow-outline"
             >
-              ĐĂNG NHẬP
+              ĐĂNG KÝ
             </button>
             <div className="flex items-center">
               <input
@@ -135,13 +169,8 @@ export default function Login() {
             </div>
           </div>
           <div className="text-left">
-            <a href="#" className="text-[#555555] font-medium hover:text-[#333] text-base transition-all duration-300">
-              Quên mật khẩu?
-            </a>
-          </div>
-          <div className="text-left">
-            <a href="/dang-ky" className="text-[#555555] font-medium hover:text-[#333] text-base transition-all duration-300">
-              Bạn chưa có tài khoản? Đăng ký
+            <a href="/dang-nhap" className="text-[#555555] font-medium hover:text-[#333] text-base transition-all duration-300">
+              Đã có tài khoản? Đăng nhập
             </a>
           </div>
         </form>

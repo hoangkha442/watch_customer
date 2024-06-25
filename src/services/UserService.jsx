@@ -5,6 +5,9 @@ export const UserServices = {
   login: async (data) => {
     return await https.post(`/auth/login`, data);
   },
+  signup: async (data) => {
+    return await https.post(`/auth/signup`, data);
+  },
   getProfile: async () => {
     return await https.get(`/user/get-info`);
   },

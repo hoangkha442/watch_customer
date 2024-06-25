@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Avatar, Spin } from 'antd';
+import { Avatar, Spin, Button } from 'antd';
 import moment from 'moment';
-import { fetchOrders, fetchOrderShipped, fetchOrderCanceled, fetchOrderPending } from '../../redux/OrderSlice';
+import Swal from 'sweetalert2';
+import { fetchOrders, fetchOrderShipped, fetchOrderCanceled, fetchOrderPending, updateOrderStatus } from '../../redux/OrderSlice';
 import { UserServices } from '../../services/UserService';
 import { BASE_URL_IMG } from '../../services/config';
 import { ProductService } from '../../services/productService';
 import logoMona from '../../asset/img/Group 16.svg';
+import no_orders from '../../asset/img/no_orders.png'; // Path to your image
 import { CheckCircleOutlined, ClockCircleOutlined, CloseCircleOutlined, TruckOutlined } from '@ant-design/icons';
-
+import GetMoreInfo from '../HomePage/GetMoreInfo/GetMoreInfo';
+import { FaCreditCard } from 'react-icons/fa';
 const Purchase = () => {
   const [activeTab, setActiveTab] = useState('pending');
   const [orderProductDetails, setOrderProductDetails] = useState([]);
@@ -95,11 +98,83 @@ const Purchase = () => {
     }
   };
 
+  const handleCancelOrder = async (orderId) => {
+    const result = await Swal.fire({
+      title: 'Bạn có chắc muốn hủy đơn hàng?',
+      text: 'Hành động này không thể hoàn tác',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Hủy đơn hàng',
+      cancelButtonText: 'Hủy bỏ'
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await dispatch(updateOrderStatus({ orderId, status: 'Cancel' })).unwrap();
+        Swal.fire({
+          title: 'Thành công',
+          text: 'Đơn hàng đã được hủy thành công',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        });
+        setActiveTab('canceled');
+        dispatch(fetchOrderPending());
+        dispatch(fetchOrderCanceled());
+      } catch (error) {
+        console.error('Error canceling order:', error);
+        Swal.fire({
+          title: 'Lỗi',
+          text: 'Có lỗi xảy ra khi hủy đơn hàng',
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
+      }
+    }
+  };
+
+  const handleConfirmReceived = async (orderId) => {
+    const result = await Swal.fire({
+      title: 'Bạn có chắc đã nhận được hàng?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Xác nhận',
+      cancelButtonText: 'Hủy bỏ'
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await dispatch(updateOrderStatus({ orderId, status: 'delivered' })).unwrap();
+        Swal.fire({
+          title: 'Thành công',
+          text: 'Đã xác nhận nhận hàng',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        });
+        setActiveTab('delivered');
+        dispatch(fetchOrderShipped());
+        dispatch(fetchOrders());
+      } catch (error) {
+        console.error('Error confirming order received:', error);
+        Swal.fire({
+          title: 'Lỗi',
+          text: 'Có lỗi xảy ra khi xác nhận nhận hàng',
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
+      }
+    }
+  };
+
   const renderOrderTable = (orders) => (
     <div className="overflow-x-auto border-x border-b border-[#ddd] px-4 pb-4">
-      <div className="p-6">
-        <div className="">
-          {orders.map((order, index) => (
+      <div className="px-6 pt-6">
+        {orders.length === 0 ? (
+          <div className="flex flex-col items-center justify-center text-center border-[2px] border-[#c89979] px-6 py-24 mb-6">
+            <img src={no_orders} alt="No orders" className="mb-4 h-28 w-24" />
+            <p className="text-lg">Chưa có đơn hàng nào</p>
+          </div>
+        ) : (
+          orders.map((order, index) => (
             <div key={order.order_id || index} className="border-[2px] border-[#c89979] px-6 py-4 mb-6">
               <div className="pb-2 border-b border-gray-200 flex justify-between items-center">
                 <p className="flex items-center text-base font-bold text-[#353535]">
@@ -113,7 +188,7 @@ const Purchase = () => {
                 <span className="text-sm text-gray-500">Ngày đặt hàng: {moment(order.order_date).format("D MMM YYYY")}</span>
               </div>
               {order.products.map((product) => (
-                <div key={product.product_id} className="flex gap-4 mb-4 pt-2 items-center justify-between">
+                <div key={product.product_id} className="flex gap-4 mb-1 pt-2 items-center justify-between">
                   <div className="flex">
                     <Avatar
                       src={productImages[product.product_id] ? `${BASE_URL_IMG}${productImages[product.product_id]}` : null}
@@ -133,39 +208,38 @@ const Purchase = () => {
                 </div>
               ))}
               <div className="text-[.9em] normal-case tracking-normal text-[#353535] text-end flex items-center justify-end gap-1">
-                <svg width="16" height="17" viewBox="0 0 253 263" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <title>Shopee Guarantee</title>
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M126.5 0.389801C126.5 0.389801 82.61 27.8998 5.75 26.8598C5.08763 26.8507 4.43006 26.9733 3.81548 27.2205C3.20091 27.4677 2.64159 27.8346 2.17 28.2998C1.69998 28.7657 1.32713 29.3203 1.07307 29.9314C0.819019 30.5425 0.688805 31.198 0.689995 31.8598V106.97C0.687073 131.07 6.77532 154.78 18.3892 175.898C30.003 197.015 46.7657 214.855 67.12 227.76L118.47 260.28C120.872 261.802 123.657 262.61 126.5 262.61C129.343 262.61 132.128 261.802 134.53 260.28L185.88 227.73C206.234 214.825 222.997 196.985 234.611 175.868C246.225 154.75 252.313 131.04 252.31 106.94V31.8598C252.31 31.1973 252.178 30.5414 251.922 29.9303C251.667 29.3191 251.292 28.7649 250.82 28.2998C250.35 27.8358 249.792 27.4696 249.179 27.2225C248.566 26.9753 247.911 26.852 247.25 26.8598C170.39 27.8998 126.5 0.389801 126.5 0.389801Z"
-                    fill="#ee4d2d"
-                  ></path>
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M207.7 149.66L119.61 107.03C116.386 105.472 113.914 102.697 112.736 99.3154C111.558 95.9342 111.772 92.2235 113.33 88.9998C114.888 85.7761 117.663 83.3034 121.044 82.1257C124.426 80.948 128.136 81.1617 131.36 82.7198L215.43 123.38C215.7 120.38 215.85 117.38 215.85 114.31V61.0298C215.848 60.5592 215.753 60.0936 215.57 59.6598C215.393 59.2232 215.128 58.8281 214.79 58.4998C214.457 58.1705 214.063 57.909 213.63 57.7298C213.194 57.5576 212.729 57.4727 212.26 57.4798C157.69 58.2298 126.5 38.6798 126.5 38.6798C126.5 38.6798 95.31 58.2298 40.71 57.4798C40.2401 57.4732 39.7735 57.5602 39.3376 57.7357C38.9017 57.9113 38.5051 58.1719 38.1709 58.5023C37.8367 58.8328 37.5717 59.2264 37.3913 59.6604C37.2108 60.0943 37.1186 60.5599 37.12 61.0298V108.03L118.84 147.57C121.591 148.902 123.808 151.128 125.129 153.884C126.45 156.64 126.797 159.762 126.113 162.741C125.429 165.72 123.755 168.378 121.363 170.282C118.972 172.185 116.006 173.221 112.95 173.22C110.919 173.221 108.915 172.76 107.09 171.87L40.24 139.48C46.6407 164.573 62.3785 186.277 84.24 200.16L124.49 225.7C125.061 226.053 125.719 226.24 126.39 226.24C127.061 226.24 127.719 226.053 128.29 225.7L168.57 200.16C187.187 188.399 201.464 170.892 209.24 150.29C208.715 150.11 208.2 149.9 207.7 149.66Z"
-                    fill="#fff"
-                  ></path>
-                </svg>{' '}
+                <FaCreditCard color="#d26e4b" size={16} />
                 Thành tiền: <span className="text-[#d26e4b] font-bold text-[1.2em]">{order.products.reduce((acc, product) => acc + product.quantity * product.price, 0).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</span>
               </div>
+              {order.status === 'pending' && (
+                <div className="text-end">
+                  <button danger onClick={() => handleCancelOrder(order.order_id)} className="mt-4 px-4 py-2 bg-[#c89979] hover:bg-[#b98969] transition-all duration-300 text-[#fff] text-sm font-medium tracking-widest font-[roboto]">
+                  Hủy đơn hàng
+                </button>
+                </div>
+              )}
+              {order.status === 'shipped' && (
+                <div className="text-end">
+                  <button onClick={() => handleConfirmReceived(order.order_id)} className="mt-4 px-4 py-2 bg-[#c89979] hover:bg-[#b98969] transition-all duration-300 text-[#fff] text-sm font-medium tracking-widest font-[roboto]">
+                    Đã nhận được hàng
+                  </button>
+                </div>
+              )}
             </div>
-          ))}
-        </div>
+          ))
+        )}
       </div>
     </div>
   );
 
   return (
     <div className="p-4 container mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Đơn hàng</h1>
-      <div className="">
+      <div className="pt-10">
         <nav className="flex space-x-2 border-b border-[#ddd]">
           {['pending', 'shipped', 'delivered', 'canceled'].map((tab) => (
             <button
               key={tab}
-              className={`py-3 px-3 font-medium text-sm transition-all duration-500 ${
+              className={`py-3 px-5 font-medium text-sm transition-all duration-500 ${
                 activeTab === tab
                   ? 'border-t-[#d26e4b] text-[#d26e4b] border-t-2 border-x border-[#ddd]'
                   : 'text-[#666666] hover:text-gray-700 hover:border-gray-300 bg-[#f5f5f5] border-x border-t border-[#ddd]'
@@ -187,6 +261,9 @@ const Purchase = () => {
         {activeTab === 'shipped' && renderOrderTable(orderData(shippedOrders))}
         {activeTab === 'delivered' && renderOrderTable(orderData(deliveredOrders))}
         {activeTab === 'canceled' && renderOrderTable(orderData(canceledOrders))}
+      </div>
+      <div className="pt-[70px]">
+        <GetMoreInfo />
       </div>
     </div>
   );
