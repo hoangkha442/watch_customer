@@ -7,12 +7,14 @@ import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import userReducer from './redux/UserSlice.js';
 import cartReducer from './redux/CartSlice';
+import orderReducer from './redux/OrderSlice';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 export let store = configureStore({
   reducer: {
     user: userReducer,
     cart: cartReducer,
+    order: orderReducer
   },
 });
 root.render(

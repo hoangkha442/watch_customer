@@ -16,6 +16,7 @@ import Detail from './pages/Detail/Detail';
 import Cart from './pages/Cart/Cart';
 import Login from './pages/Login/Login';
 import PaymentPage from './pages/PaymentPage/PaymentPage';
+import Purchase from './pages/Purchase/Purchase';
 function App() {
   return (
     
@@ -32,6 +33,7 @@ function App() {
         <Route path='/gio-hang' element={<Cart />}/>
         <Route path="/thanh-toan" element={<PaymentPage />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/don-hang" element={<Purchase />} />
         <Route path="/dang-nhap" element={<Login />} />
       </Routes>
       <Footer />

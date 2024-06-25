@@ -20,8 +20,8 @@ const Detail = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const user = useSelector(state => state.user.userInfo);
-  const cartStatus = useSelector(state => state.cart.status); // To observe cart state
-  const cartError = useSelector(state => state.cart.error); // To observe cart error
+  const cartStatus = useSelector(state => state.cart.status); 
+  const cartError = useSelector(state => state.cart.error); 
 
   const [quantity, setQuantity] = useState(1);
   const [productDetail, setProductDetail] = useState(null);
@@ -48,10 +48,8 @@ const Detail = () => {
 
   useEffect(() => {
     // Fetch cart items when the component mounts or cart state changes
-    if (user) {
-      dispatch(fetchCart());
-    }
-  }, [dispatch, user, cartStatus]); 
+    dispatch(fetchCart());
+  }, [dispatch]); 
   const increment = () => setQuantity(quantity + 1);
   const decrement = () => setQuantity(quantity > 1 ? quantity - 1 : 1);
 

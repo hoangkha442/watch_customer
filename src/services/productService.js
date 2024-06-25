@@ -25,4 +25,7 @@ export const ProductService = {
     getRelatedProduct: async (productId) => {
       return await https.get(`/product/related-products/${productId}`)
     },
+    getProductImageByProductId: async (productId) => {
+      return await https.get(`/product-images/product/${productId}`)
+    },
 }

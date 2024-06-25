@@ -53,7 +53,7 @@ const HeaderMain = () => {
     {
       key: '1',
       label: (
-        <a target="_blank" rel="noopener noreferrer" href="/thong-tin-ca-nhan">
+        <a rel="noopener noreferrer" href="/thong-tin-ca-nhan">
           Thông tin cá nhân
         </a>
       ),
@@ -61,7 +61,7 @@ const HeaderMain = () => {
     {
       key: '2',
       label: (
-        <a target="_blank" rel="noopener noreferrer" href="/don-hang">
+        <a rel="noopener noreferrer" href="/don-hang">
           Đơn hàng của bạn
         </a>
       ),
@@ -69,7 +69,7 @@ const HeaderMain = () => {
     {
       key: '3',
       label: (
-        <a target="_blank" rel="noopener noreferrer" href="/wishlist">
+        <a rel="noopener noreferrer" href="/wishlist">
           Các sản phẩm yêu thích
         </a>
       ),
@@ -77,7 +77,7 @@ const HeaderMain = () => {
     {
       key: '4',
       label: (
-        <a target="_blank" rel="noopener noreferrer" href="/change-password">
+        <a rel="noopener noreferrer" href="/change-password">
           Thay đổi mật khẩu
         </a>
       ),

@@ -19,7 +19,7 @@ import logoPayPal from '../../asset/img/logo-paypal.jpg';
 import logoMasterCard from '../../asset/img/logo-mastercard.jpg';
 import { addToCart } from '../../redux/CartSlice';
 
-Modal.setAppElement('#root'); // Thiết lập gốc của ứng dụng cho modal
+Modal.setAppElement('#root');
 
 const ProductInfo = ({ productDetail, quantity, increment, decrement }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);

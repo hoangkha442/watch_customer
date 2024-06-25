@@ -31,6 +31,11 @@ export const UserServices = {
   createMultipleOrders: async (orders) => {
     return await https.post(`/order/create-multiple`, orders);
   },
+  getOrder: () => https.get(`/order/user`),
+  putStatusOrder: (id, data) => https.put(`/order/${id}/status`, data),
+
+
+  getOrderDetail: () => https.get(`/order-detail`),
 
   // Review services
   createReview: async (data) => {
@@ -45,4 +50,7 @@ export const UserServices = {
   deleteReview: async (reviewId) => {
     return await https.delete(`/review/${reviewId}`);
   },
+
+  // Shipping
+  getShipping: () => https.get(`/shipping-details`),
 };
