@@ -18,6 +18,8 @@ import Login from './pages/Login/Login';
 import PaymentPage from './pages/PaymentPage/PaymentPage';
 import Purchase from './pages/Purchase/Purchase';
 import Register from './pages/Register/Register';
+import ForgotPassword from './pages/ForgotPassword/ForgotPassword';
+import ResetPassword from './pages/ResetPassword/ResetPassword';
 function App() {
   return (
     
@@ -37,6 +39,8 @@ function App() {
         <Route path="/don-hang" element={<Purchase />} />
         <Route path="/dang-nhap" element={<Login />} />
         <Route path="/dang-ky" element={<Register />} />
+        <Route path="/quen-mat-khau" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
       </Routes>
       <Footer />
     </Router>

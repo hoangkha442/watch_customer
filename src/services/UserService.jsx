@@ -8,6 +8,12 @@ export const UserServices = {
   signup: async (data) => {
     return await https.post(`/auth/signup`, data);
   },
+  sendResetPasswordEmail: async (data) => {
+    return await https.post(`/auth/send-reset-password-email`, data);
+  },
+  resetPassword: async (data) => {
+    return await https.post(`/auth/reset-password`, data);
+  },
   getProfile: async () => {
     return await https.get(`/user/get-info`);
   },

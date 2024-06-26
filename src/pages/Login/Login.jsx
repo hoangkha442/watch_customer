@@ -135,7 +135,7 @@ export default function Login() {
             </div>
           </div>
           <div className="text-left">
-            <a href="#" className="text-[#555555] font-medium hover:text-[#333] text-base transition-all duration-300">
+            <a href="/quen-mat-khau" className="text-[#555555] font-medium hover:text-[#333] text-base transition-all duration-300">
               Quên mật khẩu?
             </a>
           </div>

@@ -12,7 +12,7 @@ import { message, Slider, Pagination } from 'antd';
 export default function Search() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [priceRange, setPriceRange] = useState([0, 10000000]); 
@@ -27,29 +27,34 @@ export default function Search() {
 
   useEffect(() => {
     const query = searchParams.get('q');
-    ProductService.getSearchProduct(query).then((res) => {
-      const filtered = res.data
-        .map(product => {
-          const discountedPrice = product.price - (product.price * product.promotion_percentage / 100);
-          return { ...product, discountedPrice };
-        });
-      setProducts(filtered);
-      applyFilterAndSort(filtered, sortOption, priceRange);
+    if (query) {
+      ProductService.getSearchProduct(query).then((res) => {
+        if (res && res.data && Array.isArray(res.data)) {
+          const filtered = res.data.map(product => {
+            const discountedPrice = product.price - (product.price * parseFloat(product.promotion_percentage) / 100);
+            return { ...product, discountedPrice };
+          });
+          setProducts(filtered);
+          applyFilterAndSort(filtered, sortOption, priceRange);
 
-      if (filtered.length > 0) {
-        const prices = filtered.map(product => product.discountedPrice);
-        const minPrice = Math.min(...prices);
-        const maxPrice = Math.max(...prices);
-        setMinPrice(minPrice);
-        setMaxPrice(maxPrice);
-        setPriceRange([minPrice, maxPrice]);
-        setTempPriceRange([minPrice, maxPrice]); 
-      }
-    }).catch((err) => { console.error(err); });
+          if (filtered.length > 0) {
+            const prices = filtered.map(product => product.discountedPrice);
+            const minPrice = Math.min(...prices);
+            const maxPrice = Math.max(...prices);
+            setMinPrice(minPrice);
+            setMaxPrice(maxPrice);
+            setPriceRange([minPrice, maxPrice]);
+            setTempPriceRange([minPrice, maxPrice]); 
+          }
+        } else {
+          console.error("Unexpected response structure:", res);
+        }
+      }).catch((err) => { console.error(err); });
+    }
   }, [searchParams]);
 
-  const handleAddToCart = (product_id) => {
-    dispatch(addToCart({ product_id: product_id.product_id, quantity: 1 }))
+  const handleAddToCart = (product) => {
+    dispatch(addToCart({ product_id: product.product_id, quantity: 1 }))
       .then(() => {
         message.success('Thêm sản phẩm vào giỏ hàng thành công!');
       })
@@ -74,6 +79,8 @@ export default function Search() {
   };
 
   const applyFilterAndSort = (products, sortOption, priceRange) => {
+    if (!Array.isArray(products)) return;
+
     const [minPrice, maxPrice] = priceRange;
     let filtered = products.filter(product => product.discountedPrice >= minPrice && product.discountedPrice <= maxPrice);
 
@@ -105,7 +112,8 @@ export default function Search() {
 
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = startIndex + pageSize;
-  const currentProducts = filteredProducts.slice(startIndex, endIndex);
+  const currentProducts = Array.isArray(filteredProducts) ? filteredProducts.slice(startIndex, endIndex) : [];
+  // console.log('currentProducts: ', currentProducts);
 
   return (
     <div className='container pt-16'>
@@ -150,19 +158,19 @@ export default function Search() {
         </div>
         <div className="flex flex-col w-full">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {
-              currentProducts.map((product) => {
-                return (
-                  <ProductCard key={product.product_id} product={product} handleAddToCart={handleAddToCart} />
-                )
-              })
-            }
+            {Array.isArray(currentProducts) && currentProducts.length > 0 ? (
+              currentProducts.map((product) => (
+                <ProductCard key={product.product_id} product={product} handleAddToCart={handleAddToCart} />
+              ))
+            ) : (
+              <p>No products found.</p>
+            )}
           </div>
           <div className="flex justify-center mt-8">
             <Pagination
               current={currentPage}
               pageSize={pageSize}
-              total={filteredProducts.length}
+              total={Array.isArray(filteredProducts) ? filteredProducts.length : 0}
               onChange={handlePageChange}
               showSizeChanger={false}
             />
